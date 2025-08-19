@@ -15,4 +15,4 @@ class BulletEffect:
             if current_time - effect_time > 120:
                 self.effects.remove(effect)
                 continue
-            screen.blit(self.image, (int(x), int(y)))
+            screen.blit(self.image, (int(x) - self.image.get_width()//2, int(y)- self.image.get_height()//2))

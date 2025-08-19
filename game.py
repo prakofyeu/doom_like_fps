@@ -6,12 +6,15 @@ from weapon import Weapon
 from bullet_effect import BulletEffect
 from hud import Hud
 from settings import WIDTH, HEIGHT
+from enemy import  Enemy
+from enemy_renderer import  EnemyRenderer
 
 brick_texture = pygame.transform.scale(pygame.image.load("images/brciks.png"), (1024, 1024))
 wood_texture = pygame.transform.scale(pygame.image.load("images/wood.png"), (1024, 1024))
 sky_texture = pygame.transform.scale(pygame.image.load("images/sky.png"), (WIDTH, HEIGHT//2))
 weapon_texture = pygame.transform.scale(pygame.image.load("images/shotgun.png"), (WIDTH//5, HEIGHT//5))
 effect_texture = pygame.transform.scale(pygame.image.load("images/hit.png"), (70, 70))
+enemy_texture = pygame.transform.scale(pygame.image.load("images/enemy.png"), (100, 100))
 
 
 class Game:
@@ -27,6 +30,11 @@ class Game:
         self.effects = BulletEffect(effect_texture)
         self.hud = Hud(self.screen, weapon_texture)
         self.weapon = Weapon(self.player, self.map, self.effects)
+
+        self.enemies = [
+            Enemy(200, 200, enemy_texture),
+            Enemy(400, 100, enemy_texture),
+        ]
 
     def run(self):
         while True:
