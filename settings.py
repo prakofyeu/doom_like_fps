@@ -1,4 +1,5 @@
 import math
+import pygame
 
 WIDTH, HEIGHT = 600, 600
 FOV = math.pi / 3
@@ -7,5 +8,5 @@ NUM_RAYS = 120
 DELTA_ANGLE = FOV / NUM_RAYS
 MAX_DEPTH = 800
 SCALE = WIDTH // NUM_RAYS
-DIST = NUM_RAYS / (2 * math.tan(HALF_FOV))
+DIST = WIDTH / (2 * math.tan(HALF_FOV)) ###
 PROJ_COEF = 3 * DIST * 40

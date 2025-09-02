@@ -10,6 +10,7 @@ class Raycaster:
         self.tex_width = self.texture.get_width()
         self.tex_height = self.texture.get_height()
         self.tile_size = self.map.tile_size
+        self.depth = [float("inf")]*NUM_RAYS
 
     def cast_ray(self, px, py, angle):
         sin_a = math.sin(angle)
@@ -80,6 +81,7 @@ class Raycaster:
         return depth, texture_x, hit_vertical
 
     def raycasting(self, player):
+        self.depth = [float("inf")] * NUM_RAYS
         px, py = player.x, player.y
         cur_angle = player.angle - HALF_FOV
 
@@ -106,4 +108,5 @@ class Raycaster:
 
             # отрисовка
             self.screen.blit(column, (ray * SCALE, HEIGHT // 2 - proj_height // 2))
+            self.depth[ray] = depth
             cur_angle += DELTA_ANGLE

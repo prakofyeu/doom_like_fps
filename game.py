@@ -30,10 +30,11 @@ class Game:
         self.effects = BulletEffect(effect_texture)
         self.hud = Hud(self.screen, weapon_texture)
         self.weapon = Weapon(self.player, self.map, self.effects)
+        self.enemy_renderer = EnemyRenderer(self.screen, self.raycaster)
 
         self.enemies = [
-            Enemy(200, 200, enemy_texture),
-            Enemy(400, 100, enemy_texture),
+            Enemy(100, 200, enemy_texture),
+            Enemy(400, 200, enemy_texture),
         ]
 
     def run(self):
@@ -44,15 +45,24 @@ class Game:
                 if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     pygame.quit()
                     exit()
+                if pygame.key.get_pressed()[pygame.K_m]:
+                    self.map.big = True if not self.map.big else False
+
 
             self.player.move(self.map)
 
             self.screen.fill((25, 50, 50), (0, HEIGHT // 2, WIDTH, HEIGHT))
             self.screen.blit(sky_texture, (0, 0))
 
+
+
+
             self.raycaster.raycasting(self.player)
+            self.enemy_renderer.draw(self.enemies, self.player)
+
             self.effects.draw(self.screen)
             self.hud.draw()
+            self.map.draw_map(self.screen, self.player, self.enemies)
 
             pygame.display.flip()
             pygame.time.Clock().tick(30)

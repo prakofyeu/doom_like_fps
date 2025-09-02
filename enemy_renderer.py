@@ -1,5 +1,4 @@
-import pygame.transform
-
+import pygame
 from settings import SCALE, NUM_RAYS
 
 
@@ -13,14 +12,29 @@ class EnemyRenderer:
         for enemy in enemies:
             data = enemy.get_sprite(player)
             if data:
-                distance, screen_x, screen_y, proj_height = data
-                sprites.append((distance, enemy, screen_x, screen_y, proj_height))
+                full_distance, screen_x, screen_y, proj_height = data
+                sprites.append((full_distance, enemy, screen_x, screen_y, proj_height))
 
+        # сортировка по реальной дистанции (дальние первыми)
         sprites.sort(key=lambda d: d[0], reverse=True)
-        for distance, enemy, screen_x, screen_y, proj_height in sprites:
-            sprite = pygame.transform.scale(enemy.texture, (int(proj_height), int(proj_height)))
-            ray_index = int(screen_x/SCALE)
-            if 0 <= ray_index < NUM_RAYS:
-                if distance < self.raycaster.depth[ray_index]:
-                    self.screen.blit(sprite, (screen_x-proj_height//2, screen_y-proj_height//2))
 
+        for full_distance, enemy, screen_x, screen_y, proj_height in sprites:
+            # масштабируем с сохранением пропорций
+            w, h = enemy.texture.get_size()
+            scale = proj_height / h
+            sprite = pygame.transform.scale(enemy.texture, (int(w * scale), int(proj_height)))
+
+            sprite_half_width = sprite.get_width() // 2
+            left = int((screen_x - sprite_half_width) / SCALE)
+            right = int((screen_x + sprite_half_width) / SCALE)
+
+            # проверка по z-buffer (чтобы враг не лез сквозь стены)
+            visible = False
+            for ray in range(max(0, left), min(NUM_RAYS, right)):
+                if full_distance < self.raycaster.depth[ray]:
+                    visible = True
+                    break
+
+            if visible:
+                # рисуем так, чтобы низ врага стоял "на земле"
+                self.screen.blit(sprite, (screen_x - sprite_half_width, screen_y))
