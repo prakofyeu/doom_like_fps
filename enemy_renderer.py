@@ -11,7 +11,7 @@ class EnemyRenderer:
         sprites = []
         for enemy in enemies:
             data = enemy.get_sprite(player)
-            if data:
+            if data and enemy.alive:
                 full_distance, screen_x, screen_y, proj_height = data
                 sprites.append((full_distance, enemy, screen_x, screen_y, proj_height))
 

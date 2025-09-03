@@ -29,19 +29,23 @@ class Game:
         self.raycaster = Raycaster(self.screen, self.map, brick_texture)
         self.effects = BulletEffect(effect_texture)
         self.hud = Hud(self.screen, weapon_texture)
-        self.weapon = Weapon(self.player, self.map, self.effects)
+
         self.enemy_renderer = EnemyRenderer(self.screen, self.raycaster)
 
         self.enemies = [
-            Enemy(100, 200, enemy_texture),
-            Enemy(400, 200, enemy_texture),
+            Enemy(100, 200, enemy_texture, 100),
+            Enemy(400, 200, enemy_texture, 100),
+            Enemy(800, 800, enemy_texture, 100),
         ]
+
+        self.weapon = Weapon(self.player, self.map, self.effects, self.enemies)
 
     def run(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     self.weapon.shoot()
+                    self.hud.shoot()
                 if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     pygame.quit()
                     exit()

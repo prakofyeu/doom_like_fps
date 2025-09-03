@@ -3,10 +3,15 @@ from settings import WIDTH, HEIGHT, HALF_FOV, PROJ_COEF, DIST
 
 
 class Enemy:
-    def __init__(self, x, y, texture):
+    def __init__(self, x, y, texture, health):
         self.x = x
         self.y = y
         self.texture = texture
+        self.health = health
+        self.alive = True
+
+    def is_shot(self, x, y):
+        return (self.x-x)**2 + (self.y-y)**2 <= self.texture.get_width()**2
 
     def get_sprite(self, player):
         dx = self.x - player.x

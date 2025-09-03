@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Player:
-    def __init__(self, x, y, angle=0, speed=5):
+    def __init__(self, x, y, angle=0, speed=30):
         self.x = x
         self.y = y
         self.angle = angle
